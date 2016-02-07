@@ -2,14 +2,14 @@
 CC=g++
 RM=\rm *.o Demo
 src =$(wildcard *.cpp)
-OBJS =$(src:.cpp=.o)
+OBJS =$(src:.cpp=.o) tinyxml2.o
 LDFLAGS =-L/usr/lib/
-INC=-I/usr/informix/incl/c++ -I/opt/informix/incl/public
+INCLUDES = -I /home/fuguru/git/tinyxml2/
 EXECUTABLE=Demo
 
 # options I'll pass to the compiler.
-CXXFLAGS =-Wall -c
-DEBUG    =-Wall -g -c
+CXXFLAGS =-Wall -c ${INCLUDES}
+DEBUG    =-Wall -g -c ${INCLUDES}
 
 all: $(EXECUTABLE)
 
@@ -19,8 +19,8 @@ $(EXECUTABLE): $(OBJS)
 $(EXECUTABLE).o:
 	$(CC) $(CXXFLAGS) $(EXECUTABLE).cpp
 	
-tinyxml2.o: tinyxml2.h
-	$(CC) $(CXXFLAGS) tinyxml2.cpp
+tinyxml2.o:
+	$(CC) $(CXXFLAGS) ../tinyxml2/tinyxml2.cpp
 
 XMLSerialization.o: XMLSerialization.h
 	$(CC) $(CXXFLAGS) XMLSerialization.cpp
@@ -31,4 +31,4 @@ debug: all
 
 .PHONY: clean
 clean:
-	rm -f $(OBJS) Demo
+	rm -f *.o Demo
