@@ -2,33 +2,40 @@
 CC=g++
 RM=\rm *.o Demo
 src =$(wildcard *.cpp)
-OBJS =$(src:.cpp=.o) tinyxml2.o
-LDFLAGS =-L/usr/lib/
-INCLUDES = -I /home/fuguru/git/tinyxml2/
+OBJS =$(src:.cpp=.o)
+
+LIBB = /usr/lib /home/fuguru/git/tinyxml2/lib ./lib
+LIBINCLUDE = /home/fuguru/git/tinyxml2
+
+LDFLAGS = $(addprefix -L,$(LIBB))
+LIBS =-lxmls -ltinyxml2 
+
 EXECUTABLE=Demo
 
 # options I'll pass to the compiler.
-CXXFLAGS =-Wall -c ${INCLUDES}
-DEBUG    =-Wall -g -c ${INCLUDES}
+CXXFLAGS =-std=c++11 -static -Wall -c $(addprefix -I,$(LIBINCLUDE))
+DEBUG    =-std=c++11 -static -Wall -g -c $(addprefix -I,$(LIBINCLUDE))
 
-all: $(EXECUTABLE)
+all: lib $(EXECUTABLE)
 
-$(EXECUTABLE): $(OBJS)
-	$(CC) $(OBJS) -o $(EXECUTABLE)
+$(EXECUTABLE): $(EXECUTABLE).o
+	$(CC) $^ $(LDFLAGS) -o $(EXECUTABLE) $(LIBS)
 
-$(EXECUTABLE).o:
-	$(CC) $(CXXFLAGS) $(EXECUTABLE).cpp
+$(EXECUTABLE).o: $(EXECUTABLE).cpp
+	$(CC) $(CXXFLAGS) $^
 	
-tinyxml2.o:
-	$(CC) $(CXXFLAGS) ../tinyxml2/tinyxml2.cpp
+libtinyxml2:
+	$(MAKE) lib -C /home/fuguru/git/tinyxml2
 
-XMLSerialization.o: XMLSerialization.h
+XMLSerialization.o: XMLSerialization.cpp XMLSerialization.h
 	$(CC) $(CXXFLAGS) XMLSerialization.cpp
 
 debug: CXXFLAGS=$(DEBUG)
 debug: all
 
+lib: XMLSerialization.o
+	ar rvs lib/libxmls.a XMLSerialization.o
 
 .PHONY: clean
 clean:
-	rm -f *.o Demo
+	rm -f *.o Demo ./lib/*.a

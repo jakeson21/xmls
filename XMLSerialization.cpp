@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <string>
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include "XMLSerialization.h"
 
@@ -29,7 +30,7 @@ namespace xmls
     void xDouble::AssignValue(double value)
     {
         stringstream ss;
-        ss << value;
+        ss << std::setprecision(16) << std::scientific << value;
         m_sValue=ss.str();
     };
 
@@ -39,7 +40,7 @@ namespace xmls
     {
         stringstream ss(m_sValue);
         double value;
-        if( (ss >> value).fail() )
+        if( (ss >> std::setprecision(16) >> std::scientific >> value).fail() )
         {
             return 0;
         }

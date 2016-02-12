@@ -15,7 +15,7 @@
 
 #include <iostream>
 #include <sstream>
-#include "xmlserialization.h"
+#include "XMLSerialization.h"
 
 using namespace xmls;
 
