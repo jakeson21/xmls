@@ -19,7 +19,7 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "tinyxml2.h"
+#include <tinyxml2.h>
 
 using namespace std;
 
@@ -211,8 +211,8 @@ namespace xmls
     {
             friend class CollectionBase;
         private:
-            Serializable(Serializable const &s) { }
-            Serializable operator=(Serializable const &s) {return *this;};
+            Serializable(Serializable const&) { }
+            Serializable operator=(Serializable const&) {return *this;};
             static string strReplaceAll(string source, const string from, const string to);
         protected:
             string m_sXML;
